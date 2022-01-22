@@ -48,3 +48,10 @@ export function search(items: Item[], query: Query): Item[] {
 
   return results;
 }
+
+export function findDuplicates(newItem: Item, items: Item[]): Item {
+  for (const item of items) {
+    if (item.name === newItem.name && 
+    }
+  }
+}

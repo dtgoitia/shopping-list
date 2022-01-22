@@ -53,3 +53,21 @@ describe("Search", () => {
     expect(search(items, query)).toEqual([apple]);
   });
 });
+
+describe("Duplicates", () => {
+  const apple: Item = {
+    id: 1,
+    name: "Apples",
+    otherNames: new Set(["manzana"]),
+    categories: new Set(["Shop", "Supermarket", "Street market"]),
+    toBuy: false,
+  };
+  const apple: Item = {
+    id: 1,
+    name: "Apples",
+    otherNames: new Set(["manzana"]),
+    categories: new Set(["Shop", "Supermarket", "Street market"]),
+    toBuy: false,
+  };
+  test("");
+})
