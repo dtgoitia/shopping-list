@@ -2,10 +2,11 @@ import { ITEMS, LOAD_ITEMS_FROM_CONFIG } from "./config";
 import storage from "./localStorage";
 
 export type ItemId = number;
+export type ItemName = string;
 export type ShopName = string;
 export interface Item {
   id: ItemId;
-  name: string;
+  name: ItemName;
   shop: ShopName;
   toBuy: boolean;
 }
@@ -42,6 +43,16 @@ export function getItemsFromStorage(): Item[] {
   }
 
   return JSON.parse(jsonString);
+}
+
+export function addItem(items: Item[], name: ItemName, shop: ShopName): Item[] {
+  const newItem: Item = {
+    id: items.length + 1, // 1-index based
+    name: name,
+    toBuy: false,
+    shop: shop,
+  };
+  return [...items, newItem];
 }
 
 // items <--- source of truth

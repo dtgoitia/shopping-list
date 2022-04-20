@@ -1,13 +1,16 @@
+import AddItem from "./AddItem";
 import "./App.css";
 import BuyView from "./Views/Buy";
 import InventoryView from "./Views/Inventory";
-import { ITEMS, LOAD_ITEMS_FROM_CONFIG } from "./config";
 import {
+  addItem,
   addItemToBuy,
   getItemsFromStorage,
   getItemsToBuy,
   ItemId,
+  ItemName,
   removeItemToBuy,
+  ShopName,
 } from "./domain";
 import storage from "./localStorage";
 import { useState } from "react";
@@ -27,6 +30,10 @@ function App() {
     console.log(`Removing item ${id}`);
     setItems(removeItemToBuy(items, id));
   };
+  const handleAddNewItem = (name: ItemName, shop: ShopName) => {
+    console.log(`Adding a new item: ${name} (${shop})`);
+    setItems(addItem(items, name, shop));
+  };
 
   return (
     <div>
@@ -35,6 +42,7 @@ function App() {
         addItemToBuy={handleAddItemToBuy}
         removeItemToBuy={handleRemoveItemToBuy}
       />
+      <AddItem add={handleAddNewItem} />
       <hr />
       <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
     </div>
