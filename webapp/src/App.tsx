@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import BuyView from "./Views/Buy";
+import InventoryView from "./Views/Inventory";
+import { ITEMS } from "./config";
+import { addItemToBuy, getItemsToBuy, ItemId, removeItemToBuy } from "./domain";
+import { useState } from "react";
 
 function App() {
+  const [items, setItems] = useState([...ITEMS]);
+  const itemsToBuy = getItemsToBuy(items);
+  const itemsInInventory = items;
+
+  const handleAddItemToBuy = (id: ItemId) => {
+    console.log(`Adding item ${id}`);
+    setItems(addItemToBuy(items, id));
+  };
+  const handleRemoveItemToBuy = (id: ItemId) => {
+    console.log(`Removing item ${id}`);
+    setItems(removeItemToBuy(items, id));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <InventoryView
+        items={itemsInInventory}
+        addItemToBuy={handleAddItemToBuy}
+        removeItemToBuy={handleRemoveItemToBuy}
+      />
+      <hr />
+      <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
     </div>
   );
 }
