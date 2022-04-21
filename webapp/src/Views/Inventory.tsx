@@ -29,6 +29,10 @@ function InventoryView({
   addItemToBuy,
   removeItemToBuy,
 }: InventoryViewProps) {
+  {
+    /* TODO: add search bar to add items from InventoryView to BuyView */
+  }
+
   return (
     <div>
       <h1>Inventory view</h1>
