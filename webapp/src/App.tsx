@@ -14,7 +14,13 @@ import {
 } from "./domain";
 import storage from "./localStorage";
 import { useState } from "react";
+import styled from "styled-components";
 
+const Centered = styled.div`
+  margin: 0 auto;
+  padding: 0 1rem;
+  max-width: 800px;
+`;
 function App() {
   const [items, setItems] = useState(getItemsFromStorage());
   storage.items.set(JSON.stringify(items));
@@ -36,16 +42,15 @@ function App() {
   };
 
   return (
-    <div>
+    <Centered>
       <InventoryView
         items={itemsInInventory}
         addItemToBuy={handleAddItemToBuy}
         removeItemToBuy={handleRemoveItemToBuy}
       />
       <AddItem add={handleAddNewItem} />
-      <hr />
       <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
-    </div>
+    </Centered>
   );
 }
 

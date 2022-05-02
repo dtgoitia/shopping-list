@@ -1,4 +1,5 @@
 import { Item, ItemId } from "../domain";
+import { Button } from "semantic-ui-react";
 
 interface SelectableItempProps {
   item: Item;
@@ -6,17 +7,22 @@ interface SelectableItempProps {
 }
 function SelectableItem({ item, onClick }: SelectableItempProps) {
   return (
-    <li onClick={() => onClick(item.id)}>
-      {item.toBuy ? (
-        <del>
-          {item.id} {item.name}
-        </del>
-      ) : (
-        <span>
-          {item.id} {item.name}
-        </span>
-      )}
-    </li>
+    <div>
+      <Button
+        onClick={() => onClick(item.id)}
+        className="bp4-button bp4-minimal"
+      >
+        {item.toBuy ? (
+          <del>
+            {item.id} {item.name}
+          </del>
+        ) : (
+          <span>
+            {item.id} {item.name}
+          </span>
+        )}
+      </Button>
+    </div>
   );
 }
 interface InventoryViewProps {
