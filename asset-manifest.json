@@ -1,16 +1,24 @@
 {
   "files": {
-    "main.css": "/shopping-list/static/css/main.073c9b0a.css",
-    "main.js": "/shopping-list/static/js/main.9aa73882.js",
+    "main.css": "/shopping-list/static/css/main.80847950.css",
+    "main.js": "/shopping-list/static/js/main.0a9f0ec8.js",
     "static/js/377.35d175c7.chunk.js": "/shopping-list/static/js/377.35d175c7.chunk.js",
+    "static/media/blueprint-icons-20.eot?": "/shopping-list/static/media/blueprint-icons-20.7c675118c62235e8ba85.eot",
+    "static/media/blueprint-icons-20.ttf?": "/shopping-list/static/media/blueprint-icons-20.58cecdd9d530e9748708.ttf",
+    "static/media/blueprint-icons-16.eot?": "/shopping-list/static/media/blueprint-icons-16.eeaaf48f3aa9749d8399.eot",
+    "static/media/blueprint-icons-16.ttf?": "/shopping-list/static/media/blueprint-icons-16.8dad11908ed3e5e9e47a.ttf",
+    "static/media/blueprint-icons-20.woff?": "/shopping-list/static/media/blueprint-icons-20.37c48d148164e6a1b9b1.woff",
+    "static/media/blueprint-icons-16.woff?": "/shopping-list/static/media/blueprint-icons-16.bdd01e08b240fc397e5a.woff",
     "service-worker.js": "/shopping-list/service-worker.js",
+    "static/media/blueprint-icons-20.woff2?": "/shopping-list/static/media/blueprint-icons-20.16fbb3eddfb5d29019ae.woff2",
+    "static/media/blueprint-icons-16.woff2?": "/shopping-list/static/media/blueprint-icons-16.d59af1d43e67354fabe4.woff2",
     "index.html": "/shopping-list/index.html",
-    "main.073c9b0a.css.map": "/shopping-list/static/css/main.073c9b0a.css.map",
-    "main.9aa73882.js.map": "/shopping-list/static/js/main.9aa73882.js.map",
+    "main.80847950.css.map": "/shopping-list/static/css/main.80847950.css.map",
+    "main.0a9f0ec8.js.map": "/shopping-list/static/js/main.0a9f0ec8.js.map",
     "377.35d175c7.chunk.js.map": "/shopping-list/static/js/377.35d175c7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.9aa73882.js"
+    "static/css/main.80847950.css",
+    "static/js/main.0a9f0ec8.js"
   ]
 }
