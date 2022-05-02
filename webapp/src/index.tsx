@@ -1,4 +1,5 @@
 import App from "./App";
+import "./blueprint.css";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
