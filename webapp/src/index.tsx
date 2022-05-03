@@ -3,11 +3,14 @@ import "./blueprint.css";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { GlobalStyle } from "./style/globalStyle";
+import { activeTheme } from "./style/globalStyle";
 import React from "react";
 import ReactDOM from "react-dom";
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalStyle theme={activeTheme} />
     <App />
   </React.StrictMode>,
   document.getElementById("root")

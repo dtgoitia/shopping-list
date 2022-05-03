@@ -13,6 +13,7 @@ import {
   ShopName,
 } from "./domain";
 import storage from "./localStorage";
+import BlueprintThemeProvider from "./style/theme";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -42,15 +43,17 @@ function App() {
   };
 
   return (
-    <Centered>
-      <InventoryView
-        items={itemsInInventory}
-        addItemToBuy={handleAddItemToBuy}
-        removeItemToBuy={handleRemoveItemToBuy}
-      />
-      <AddItem add={handleAddNewItem} />
-      <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
-    </Centered>
+    <BlueprintThemeProvider>
+      <Centered>
+        <InventoryView
+          items={itemsInInventory}
+          addItemToBuy={handleAddItemToBuy}
+          removeItemToBuy={handleRemoveItemToBuy}
+        />
+        <AddItem add={handleAddNewItem} />
+        <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
+      </Centered>
+    </BlueprintThemeProvider>
   );
 }
 
