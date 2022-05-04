@@ -1,10 +1,13 @@
 import AddItem from "./AddItem";
 import "./App.css";
+import SearchBox from "./SearchBox";
 import BuyView from "./Views/Buy";
 import InventoryView from "./Views/Inventory";
 import {
   addItem,
   addItemToBuy,
+  filterInventory,
+  FilterQuery,
   getItemsFromStorage,
   getItemsToBuy,
   ItemId,
@@ -22,8 +25,10 @@ const Centered = styled.div`
   padding: 0 1rem;
   max-width: 800px;
 `;
+
 function App() {
   const [items, setItems] = useState(getItemsFromStorage());
+  const [filterQuery, setFilterQuery] = useState<FilterQuery>("");
   storage.items.set(JSON.stringify(items));
 
   const itemsToBuy = getItemsToBuy(items);
@@ -45,8 +50,9 @@ function App() {
   return (
     <BlueprintThemeProvider>
       <Centered>
+        <SearchBox query={filterQuery} onChange={setFilterQuery} />
         <InventoryView
-          items={itemsInInventory}
+          items={filterInventory(itemsInInventory, filterQuery)}
           addItemToBuy={handleAddItemToBuy}
           removeItemToBuy={handleRemoveItemToBuy}
         />

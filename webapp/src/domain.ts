@@ -11,6 +11,7 @@ export interface Item {
   shop: ShopName;
   toBuy: boolean;
 }
+export type FilterQuery = string;
 
 export function addItemToBuy(items: Item[], id: ItemId): Item[] {
   return items.map((item: Item) => {
@@ -54,6 +55,18 @@ export function addItem(items: Item[], name: ItemName, shop: ShopName): Item[] {
     shop: shop,
   };
   return [...items, newItem];
+}
+
+export function filterInventory(items: Item[], query: FilterQuery): Item[] {
+  if (query === "") return items;
+  const completer = new ItemAutocompleter(items);
+
+  const prefixes = query.split(" ").filter((prefix) => !!prefix);
+  if (!prefixes) return items;
+
+  const unsortedResults = completer.search(prefixes);
+
+  return items.filter((item) => unsortedResults.has(item));
 }
 
 // items <--- source of truth
