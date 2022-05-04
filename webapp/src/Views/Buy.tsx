@@ -42,7 +42,7 @@ function ShopItems({ shop, items, tickOff }: ShopItemsProps) {
       </p>
       <ol>
         {items.map((item) => (
-          <ShopItem item={item} tickOff={tickOff} />
+          <ShopItem key={item.id} item={item} tickOff={tickOff} />
         ))}
       </ol>
     </div>
@@ -60,8 +60,8 @@ function BuyView({ items, tickOff }: BuyViewProps) {
     <div>
       <h1>Buy view</h1>
       <p>Use this view to purchase items in each store</p>
-      {Object.entries(itemByShop).map(([shop, item]) => (
-        <ShopItems shop={shop} items={item} tickOff={tickOff} />
+      {Object.entries(itemByShop).map(([shop, items]) => (
+        <ShopItems key={shop} shop={shop} items={items} tickOff={tickOff} />
       ))}
     </div>
   );

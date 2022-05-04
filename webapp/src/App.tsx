@@ -12,6 +12,7 @@ import {
   getItemsToBuy,
   ItemId,
   ItemName,
+  removeItem,
   removeItemToBuy,
   ShopName,
 } from "./domain";
@@ -46,6 +47,10 @@ function App() {
     console.log(`Adding a new item: ${name} (${shop})`);
     setItems(addItem(items, name, shop));
   };
+  const handleRemoveItem = (id: ItemId) => {
+    console.log(`Removing item (ID: ${id})`);
+    setItems(removeItem(items, id));
+  };
 
   return (
     <BlueprintThemeProvider>
@@ -55,6 +60,7 @@ function App() {
           items={filterInventory(itemsInInventory, filterQuery)}
           addItemToBuy={handleAddItemToBuy}
           removeItemToBuy={handleRemoveItemToBuy}
+          removeItem={handleRemoveItem}
         />
         <AddItem add={handleAddNewItem} />
         <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />

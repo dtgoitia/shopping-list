@@ -57,6 +57,10 @@ export function addItem(items: Item[], name: ItemName, shop: ShopName): Item[] {
   return [...items, newItem];
 }
 
+export function removeItem(items: Item[], id: ItemId): Item[] {
+  return items.filter((item) => item.id !== id);
+}
+
 export function filterInventory(items: Item[], query: FilterQuery): Item[] {
   if (query === "") return items;
   const completer = new ItemAutocompleter(items);
