@@ -62,7 +62,14 @@ export function addItem(items: Item[], name: ItemName, shop: ShopName): Item[] {
 }
 
 export function removeItem(items: Item[], id: ItemId): Item[] {
-  return items.filter((item) => item.id !== id);
+  return (
+    items
+      .filter((item) => item.id !== id)
+      // Use case: if an item has been removed from the middle of the `items` list, adding
+      // an item with id=items.length+1 means that the last item and the new item will
+      // have the same ID. To avoid this, update the IDs when an item is removed
+      .map((item, i) => ({ ...item, id: i + 1 }))
+  );
 }
 
 export function filterInventory(items: Item[], query: FilterQuery): Item[] {
