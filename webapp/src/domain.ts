@@ -8,6 +8,7 @@ export type ShopName = string;
 export interface Item {
   id: ItemId;
   name: ItemName;
+  otherNames: ItemName[];
   shop: ShopName;
   toBuy: boolean;
 }
@@ -47,12 +48,18 @@ export function getItemsFromStorage(): Item[] {
   return JSON.parse(jsonString);
 }
 
-export function addItem(items: Item[], name: ItemName, shop: ShopName): Item[] {
+export function addItem(
+  items: Item[],
+  name: ItemName,
+  shop: ShopName,
+  otherNames: ItemName[]
+): Item[] {
   const newItem: Item = {
     id: items.length + 1, // 1-index based
     name: name,
     toBuy: false,
     shop: shop,
+    otherNames: otherNames,
   };
 
   // Use case: if an item has been removed from the middle of the `items` list, adding
@@ -142,7 +149,8 @@ export class ItemAutocompleter {
   }
 
   private getWordsFromItem(item: Item): Set<Word> {
-    const itemWords = [item.name]
+    const itemWords = [item.name, ...(item.otherNames || [])]
+      .filter((name) => name)
       .map((name) => name.toLowerCase())
       .map((name) => name.split(" "))
       .flat();

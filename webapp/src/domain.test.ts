@@ -1,7 +1,7 @@
 import { Item, ItemAutocompleter } from "./domain";
 
 describe("Find items", () => {
-  const defaultArgs = { shop: "Lidl", toBuy: true };
+  const defaultArgs = { shop: "Lidl", toBuy: true, otherNames: [] };
 
   const coder: Item = { id: 1, name: "Coder", ...defaultArgs };
   const code: Item = { id: 2, name: "Code", ...defaultArgs };

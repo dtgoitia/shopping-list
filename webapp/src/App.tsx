@@ -43,9 +43,13 @@ function App() {
     console.log(`Removing item ${id}`);
     setItems(removeItemToBuy(items, id));
   };
-  const handleAddNewItem = (name: ItemName, shop: ShopName) => {
+  const handleAddNewItem = (
+    name: ItemName,
+    shop: ShopName,
+    otherNames: ItemName[]
+  ) => {
     console.log(`Adding a new item: ${name} (${shop})`);
-    setItems(addItem(items, name, shop));
+    setItems(addItem(items, name, shop, otherNames));
   };
   const handleRemoveItem = (id: ItemId) => {
     console.log(`Removing item (ID: ${id})`);
