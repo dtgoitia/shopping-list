@@ -1,12 +1,17 @@
-import { Item, ItemAutocompleter } from "./domain";
+import { ItemAutocompleter } from "./domain";
+import { Item } from "./domain/model";
 
 describe("Find items", () => {
-  const defaultArgs = { shop: "Lidl", toBuy: true, otherNames: [] };
+  const defaultArgs = { shops: [], toBuy: true, otherNames: [] };
 
-  const coder: Item = { id: 1, name: "Coder", ...defaultArgs };
-  const code: Item = { id: 2, name: "Code", ...defaultArgs };
-  const cocoa: Item = { id: 3, name: "Cocoa", ...defaultArgs };
-  const banana: Item = { id: 4, name: "Banana", ...defaultArgs };
+  const coder: Item = { id: "item_aaaaaaaaaa", name: "Coder", ...defaultArgs };
+  const code: Item = { id: "item_bbbbbbbbbb", name: "Code", ...defaultArgs };
+  const cocoa: Item = { id: "item_cccccccccc", name: "Cocoa", ...defaultArgs };
+  const banana: Item = {
+    id: "item_dddddddddd",
+    name: "Banana",
+    ...defaultArgs,
+  };
 
   const items: Item[] = [coder, code, cocoa, banana];
 
@@ -26,7 +31,11 @@ describe("Find items", () => {
   });
 
   test("match the start of any word in the item", () => {
-    const bigCocoa: Item = { id: 5, name: "Big cocoa", ...defaultArgs };
+    const bigCocoa: Item = {
+      id: "item_eeeeeeeeee",
+      name: "Big cocoa",
+      ...defaultArgs,
+    };
     const items: Item[] = [coder, bigCocoa, banana];
 
     const completer = new ItemAutocompleter(items);

@@ -1,65 +1,83 @@
 import AddItem from "./AddItem";
 import "./App.css";
 import SearchBox from "./SearchBox";
-import BuyView from "./Views/Buy";
 import InventoryView from "./Views/Inventory";
-import {
-  addItem,
-  addItemToBuy,
-  filterInventory,
-  FilterQuery,
-  getItemsFromStorage,
-  getItemsToBuy,
-  ItemId,
-  ItemName,
-  removeItem,
-  removeItemToBuy,
-  ShopName,
-} from "./domain";
-import storage from "./localStorage";
+import Centered from "./components/Centered";
+import NavBar from "./components/NavBar";
+import { filterInventory, FilterQuery } from "./domain";
+import { ItemManager } from "./domain/ItemManager";
+import { Item, ItemId, ItemName } from "./domain/model";
+import ItemEditor from "./pages/ItemEditor/ItemEditor";
+import ItemsPage from "./pages/Items";
+import PageNotFound from "./pages/PageNotFound";
+import Paths from "./routes";
 import BlueprintThemeProvider from "./style/theme";
-import { useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
-const Centered = styled.div`
-  margin: 0 auto;
-  padding: 0 1rem;
-  max-width: 800px;
-`;
+interface Props {
+  itemManager: ItemManager;
+}
 
-function App() {
-  const [items, setItems] = useState(getItemsFromStorage());
+function OldPage({ itemManager }: Props) {
+  const [items, setItems] = useState<Item[]>([]);
   const [filterQuery, setFilterQuery] = useState<FilterQuery>("");
-  storage.items.set(JSON.stringify(items));
 
-  const itemsToBuy = getItemsToBuy(items);
   const itemsInInventory = items;
 
+  useEffect(() => {
+    const subscription = itemManager.changes$.subscribe((_) => {
+      setItems(itemManager.getAll());
+    });
+
+    setItems(itemManager.getAll());
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [itemManager]);
+
   const handleAddItemToBuy = (id: ItemId) => {
-    console.log(`Adding item ${id}`);
-    setItems(addItemToBuy(items, id));
+    console.log(`App.handleAddItemToBuy::adding item ${id}`);
+    itemManager.addToShoppingList(id).match({
+      ok: () => {},
+      err: () => {}, // TODO: display error in UI
+    });
   };
+
   const handleRemoveItemToBuy = (id: ItemId) => {
-    console.log(`Removing item ${id}`);
-    setItems(removeItemToBuy(items, id));
+    console.log(`App.handleAddItemToBuy::removing item ${id}`);
+    itemManager.removeFromShoppingList(id).match({
+      ok: () => {},
+      err: () => {}, // TODO: display error in UI
+    });
   };
-  const handleAddNewItem = (
-    name: ItemName,
-    shop: ShopName,
-    otherNames: ItemName[]
-  ) => {
-    console.log(`Adding a new item: ${name} (${shop})`);
-    setItems(addItem(items, name, shop, otherNames));
+
+  const handleAddNewItem = (name: ItemName, otherNames: ItemName[]) => {
+    console.log(`App.handleAddNewItem::adding a new item: ${name}`);
+    itemManager.add({ name, otherNames }).match({
+      ok: () => console.log(`App.handleAddNewItem::added a new item: ${name}`),
+      err: () => console.log("App.handleAddNewItem::error adding a new item"),
+    });
   };
+
   const handleRemoveItem = (id: ItemId) => {
-    console.log(`Removing item (ID: ${id})`);
-    setItems(removeItem(items, id));
+    console.log(`App.handleRemoveItem::removing an item: ${id}`);
+    itemManager.delete({ id }).match({
+      ok: () => console.log(),
+      err: () => console.log("App.handleRemoveItem::error removing an item"),
+    });
   };
 
   return (
     <BlueprintThemeProvider>
       <Centered>
-        <SearchBox query={filterQuery} onChange={setFilterQuery} />
+        <NavBar />
+        <SearchBox
+          query={filterQuery}
+          onChange={setFilterQuery}
+          placeholder={"Filter inventory..."}
+        />
         <InventoryView
           items={filterInventory(itemsInInventory, filterQuery)}
           addItemToBuy={handleAddItemToBuy}
@@ -67,9 +85,29 @@ function App() {
           removeItem={handleRemoveItem}
         />
         <AddItem add={handleAddNewItem} />
-        <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
+        {/* <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} /> */}
       </Centered>
     </BlueprintThemeProvider>
+  );
+}
+
+function App({ itemManager }: Props) {
+  return (
+    <Routes>
+      <Route
+        path={Paths.root}
+        element={<OldPage itemManager={itemManager} />}
+      />
+      <Route
+        path={Paths.items}
+        element={<ItemsPage itemManager={itemManager} />}
+      />
+      <Route
+        path={Paths.itemEditor}
+        element={<ItemEditor itemManager={itemManager} />}
+      />
+      <Route path={Paths.notFound} element={<PageNotFound />} />
+    </Routes>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Item, ItemId } from "../domain";
+import { Item, ItemId } from "../domain/model";
 import { Button } from "@blueprintjs/core";
 import styled from "styled-components";
 
@@ -51,7 +51,7 @@ function InventoryView({
 }: InventoryViewProps) {
   return (
     <div>
-      <h1>Inventory view</h1>
+      <h1>Shopping list (old "Inventory view")</h1>
       <p>Use this view to add items to the list</p>
       <ol>
         {items.map((item) => {

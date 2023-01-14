@@ -1,82 +1,10 @@
 import { buildTrie, findWords, TrieNode, Word } from "./autocomplete";
-import { ITEMS, LOAD_ITEMS_FROM_CONFIG } from "./config";
-import storage from "./localStorage";
+import { Item } from "./domain/model";
 
-export type ItemId = number;
-export type ItemName = string;
-export type ShopName = string;
-export interface Item {
-  id: ItemId;
-  name: ItemName;
-  otherNames: ItemName[];
-  shop: ShopName;
-  toBuy: boolean;
-}
 export type FilterQuery = string;
-
-export function addItemToBuy(items: Item[], id: ItemId): Item[] {
-  return items.map((item: Item) => {
-    if (item.id !== id) return item;
-    return { ...item, toBuy: true };
-  });
-}
-
-export function removeItemToBuy(items: Item[], id: ItemId): Item[] {
-  return items.map((item: Item) => {
-    if (item.id !== id) return item;
-    return { ...item, toBuy: false };
-  });
-}
 
 export function getItemsToBuy(items: Item[]): Item[] {
   return items.filter((item) => item.toBuy);
-}
-
-export function getItemsFromStorage(): Item[] {
-  if (LOAD_ITEMS_FROM_CONFIG) {
-    return ITEMS;
-  }
-  if (!storage.items.exists()) {
-    return [];
-  }
-
-  const jsonString = storage.items.read();
-  if (!jsonString) {
-    return [];
-  }
-
-  return JSON.parse(jsonString);
-}
-
-export function addItem(
-  items: Item[],
-  name: ItemName,
-  shop: ShopName,
-  otherNames: ItemName[]
-): Item[] {
-  const newItem: Item = {
-    id: items.length + 1, // 1-index based
-    name: name,
-    toBuy: false,
-    shop: shop,
-    otherNames: otherNames,
-  };
-
-  // Use case: if an item has been removed from the middle of the `items` list, adding
-  // an item with id=items.length+1 means that the last item and the new item will have
-  // the same ID. To avoid this, update the IDs when an item is added:
-  return [...items, newItem].map((item, i) => ({ ...item, id: i + 1 }));
-}
-
-export function removeItem(items: Item[], id: ItemId): Item[] {
-  return (
-    items
-      .filter((item) => item.id !== id)
-      // Use case: if an item has been removed from the middle of the `items` list, adding
-      // an item with id=items.length+1 means that the last item and the new item will
-      // have the same ID. To avoid this, update the IDs when an item is removed
-      .map((item, i) => ({ ...item, id: i + 1 }))
-  );
 }
 
 export function filterInventory(items: Item[], query: FilterQuery): Item[] {

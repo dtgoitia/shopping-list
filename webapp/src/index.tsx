@@ -1,17 +1,24 @@
 import App from "./App";
 import "./blueprint.css";
+import { BASE_URL } from "./constants";
 import "./index.css";
+import { initialize } from "./initialize";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { GlobalStyle } from "./style/globalStyle";
 import { activeTheme } from "./style/globalStyle";
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+
+const { itemManager } = initialize();
 
 ReactDOM.render(
   <React.StrictMode>
-    <GlobalStyle theme={activeTheme} />
-    <App />
+    <BrowserRouter basename={BASE_URL}>
+      <GlobalStyle theme={activeTheme} />
+      <App itemManager={itemManager} />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

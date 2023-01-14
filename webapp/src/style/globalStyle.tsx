@@ -34,4 +34,8 @@ export const GlobalStyle = createGlobalStyle<Props>`
   html {
     background-color: ${({ theme }) => get_theme(theme).backgroundColor};
   }
+  ol, ul {
+    list-style-type: none;
+    margin: 0;
+  }
 `;

@@ -1,6 +1,7 @@
 enum ValueType {
   string = "string",
   number = "number",
+  object = "object",
 }
 
 class StoredItem<T> {
@@ -30,6 +31,9 @@ class StoredItem<T> {
       case ValueType.number:
         return Number(rawValue) as unknown as T;
 
+      case ValueType.object:
+        return JSON.parse(rawValue);
+
       default:
         throw new Error(`Type ${this.type} is not supported yet`);
     }
@@ -47,6 +51,10 @@ class StoredItem<T> {
 
       case ValueType.number:
         serializedValue = (value as unknown as number).toString();
+        break;
+
+      case ValueType.object:
+        serializedValue = JSON.stringify(value);
         break;
 
       default:
@@ -70,13 +78,14 @@ class StoredItem<T> {
   }
 }
 
-class Storage {
-  items: StoredItem<string | undefined>;
+const STORAGE_PREFIX = "shop";
+const prefix = (key: string): string => `${STORAGE_PREFIX}_${key}`;
+
+export class Storage {
+  items: StoredItem<object[] | undefined>;
 
   constructor() {
-    this.items = new StoredItem("items", ValueType.string);
-    // this.b = new StoredItem("b", 123);
-    // this.c = new StoredItem("c");
+    this.items = new StoredItem(prefix(`items`), ValueType.object);
   }
 }
 
