@@ -10,7 +10,7 @@ interface NavBarButtonProps {
 function NavBarButton({ text, path }: NavBarButtonProps) {
   return (
     <Link to={path}>
-      <Button text={`Go to "${text}"`} />
+      <Button text={text} large={true} />
     </Link>
   );
 }
