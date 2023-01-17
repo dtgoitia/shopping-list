@@ -7,8 +7,9 @@ import NavBar from "../components/NavBar";
 import { filterInventory, FilterQuery } from "../domain";
 import { ItemManager } from "../domain/ItemManager";
 import { Item, ItemId, ItemName } from "../domain/model";
+import { notify } from "../notify";
 import BlueprintThemeProvider from "../style/theme";
-import { Alignment, Collapse, Switch } from "@blueprintjs/core";
+import { Alignment, Button, Collapse, Switch } from "@blueprintjs/core";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -20,6 +21,9 @@ function ShoppingList({ itemManager }: Props) {
   const [items, setItems] = useState<Item[]>([]);
   const [filterQuery, setFilterQuery] = useState<FilterQuery>("");
   const [showInventory, setShowInventory] = useState<boolean>(false);
+
+  // This "change" refers to toggling the `item.toBuy` property
+  const [changedItems, setChangeItems] = useState<ItemId[]>([]);
 
   const itemsInInventory = items;
   const itemsToBuy = items.filter((item) => item.toBuy === true);
@@ -39,7 +43,9 @@ function ShoppingList({ itemManager }: Props) {
   function handleAddItemToBuy(id: ItemId) {
     console.log(`App.handleAddItemToBuy::adding item ${id}`);
     itemManager.addToShoppingList(id).match({
-      ok: () => {},
+      ok: () => {
+        setChangeItems([...changedItems, id]);
+      },
       err: () => {}, // TODO: display error in UI
     });
   }
@@ -47,7 +53,9 @@ function ShoppingList({ itemManager }: Props) {
   function handleRemoveItemToBuy(id: ItemId) {
     console.log(`App.handleAddItemToBuy::removing item ${id}`);
     itemManager.removeFromShoppingList(id).match({
-      ok: () => {},
+      ok: () => {
+        setChangeItems([...changedItems, id]);
+      },
       err: () => {}, // TODO: display error in UI
     });
   }
@@ -64,6 +72,43 @@ function ShoppingList({ itemManager }: Props) {
     setShowInventory(!showInventory);
   }
 
+  function handleUndo(): void {
+    // TODO: this logic should probably be a standalone class, agnostic to UI
+    if (changedItems.length === 0) {
+      notify({ message: `No changes to undo`, intent: "danger" });
+      return;
+    }
+    const lastChangedItemId = changedItems.slice(-1)[0];
+
+    itemManager.get(lastChangedItemId).match({
+      Some: (item) => {
+        const { id, toBuy } = item as Item;
+
+        const popLastChange = () => setChangeItems(changedItems.slice(0, -1));
+
+        if (toBuy) {
+          console.debug(`ShoppingList.handleUndo::removing ${id} from toBuy`);
+          itemManager.removeFromShoppingList(id).match({
+            ok: () => popLastChange(),
+            err: () => {}, // TODO: display error in UI
+          });
+        } else {
+          console.debug(`ShoppingList.handleUndo::adding ${id} to toBuy`);
+          itemManager.addToShoppingList(id).match({
+            ok: () => popLastChange(),
+            err: () => {}, // TODO: display error in UI
+          });
+        }
+      },
+
+      None: () =>
+        notify({
+          message: `Item ${lastChangedItemId} not found`,
+          intent: "danger",
+        }),
+    });
+  }
+
   return (
     <BlueprintThemeProvider>
       <Centered>
@@ -76,6 +121,7 @@ function ShoppingList({ itemManager }: Props) {
             alignIndicator={Alignment.RIGHT}
           />
         </SwitchContainer>
+
         <Collapse isOpen={showInventory}>
           <SearchBox
             query={filterQuery}
@@ -89,6 +135,14 @@ function ShoppingList({ itemManager }: Props) {
           />
           <AddItem add={handleAddNewItem} />
         </Collapse>
+
+        <pre>{JSON.stringify(changedItems)}</pre>
+        <Button
+          disabled={changedItems.length === 0}
+          text="undo"
+          icon="undo"
+          onClick={handleUndo}
+        />
 
         <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
       </Centered>
