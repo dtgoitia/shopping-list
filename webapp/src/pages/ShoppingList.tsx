@@ -8,7 +8,9 @@ import { filterInventory, FilterQuery } from "../domain";
 import { ItemManager } from "../domain/ItemManager";
 import { Item, ItemId, ItemName } from "../domain/model";
 import BlueprintThemeProvider from "../style/theme";
+import { Alignment, Collapse, Switch } from "@blueprintjs/core";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 interface Props {
   itemManager: ItemManager;
@@ -17,6 +19,7 @@ interface Props {
 function ShoppingList({ itemManager }: Props) {
   const [items, setItems] = useState<Item[]>([]);
   const [filterQuery, setFilterQuery] = useState<FilterQuery>("");
+  const [showInventory, setShowInventory] = useState<boolean>(false);
 
   const itemsInInventory = items;
   const itemsToBuy = items.filter((item) => item.toBuy === true);
@@ -33,45 +36,59 @@ function ShoppingList({ itemManager }: Props) {
     };
   }, [itemManager]);
 
-  const handleAddItemToBuy = (id: ItemId) => {
+  function handleAddItemToBuy(id: ItemId) {
     console.log(`App.handleAddItemToBuy::adding item ${id}`);
     itemManager.addToShoppingList(id).match({
       ok: () => {},
       err: () => {}, // TODO: display error in UI
     });
-  };
+  }
 
-  const handleRemoveItemToBuy = (id: ItemId) => {
+  function handleRemoveItemToBuy(id: ItemId) {
     console.log(`App.handleAddItemToBuy::removing item ${id}`);
     itemManager.removeFromShoppingList(id).match({
       ok: () => {},
       err: () => {}, // TODO: display error in UI
     });
-  };
+  }
 
-  const handleAddNewItem = (name: ItemName, otherNames: ItemName[]) => {
+  function handleAddNewItem(name: ItemName, otherNames: ItemName[]) {
     console.log(`App.handleAddNewItem::adding a new item: ${name}`);
     itemManager.add({ name, otherNames }).match({
       ok: () => console.log(`App.handleAddNewItem::added a new item: ${name}`),
       err: () => console.log("App.handleAddNewItem::error adding a new item"),
     });
-  };
+  }
+
+  function toggleShowInventory(): void {
+    setShowInventory(!showInventory);
+  }
 
   return (
     <BlueprintThemeProvider>
       <Centered>
         <NavBar />
-        <SearchBox
-          query={filterQuery}
-          onChange={setFilterQuery}
-          placeholder={"Filter inventory..."}
-        />
-        <InventoryView
-          items={filterInventory(itemsInInventory, filterQuery)}
-          addItemToBuy={handleAddItemToBuy}
-          removeItemToBuy={handleRemoveItemToBuy}
-        />
-        <AddItem add={handleAddNewItem} />
+        <SwitchContainer>
+          <Switch
+            checked={showInventory}
+            label="Show inventory"
+            onChange={() => toggleShowInventory()}
+            alignIndicator={Alignment.RIGHT}
+          />
+        </SwitchContainer>
+        <Collapse isOpen={showInventory}>
+          <SearchBox
+            query={filterQuery}
+            onChange={setFilterQuery}
+            placeholder={"Filter inventory..."}
+          />
+          <InventoryView
+            items={filterInventory(itemsInInventory, filterQuery)}
+            addItemToBuy={handleAddItemToBuy}
+            removeItemToBuy={handleRemoveItemToBuy}
+          />
+          <AddItem add={handleAddNewItem} />
+        </Collapse>
 
         <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
       </Centered>
@@ -80,3 +97,9 @@ function ShoppingList({ itemManager }: Props) {
 }
 
 export default ShoppingList;
+
+const SwitchContainer = styled.div`
+  margin: 0 0 0 1rem;
+  display: flex;
+  flex-direction: row-reverse;
+`;
