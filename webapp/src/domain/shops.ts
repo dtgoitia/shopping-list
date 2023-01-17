@@ -1,28 +1,23 @@
 // TODO: on the first phase, hardcore available shops, you can later on allow adding and removing shops
 // export class ShopManager {}
-import { Shop, ShopId, ShopName } from "../domain/model";
+import { Shop, ShopId } from "../domain/model";
 import { unreachable } from "./devex";
 import { SortAction } from "./sort";
 
-const SHOPS = new Map<ShopId, ShopName>([
-  ["shop_aaaaaaaaaa", "Lidl"],
-  ["shop_bbbbbbbbbb", "Morrisons"],
-  ["shop_cccccccccc", "Tesco"],
-  ["shop_dddddddddd", "Sainsburys"],
-  ["shop_eeeeeeeeee", "Savers"],
-]);
+export const ALL_SHOPS: Shop[] = [
+  { id: "shop_aaaaaaaaaa", name: "Lidl" },
+  { id: "shop_bbbbbbbbbb", name: "Morrisons" },
+  { id: "shop_cccccccccc", name: "Tesco" },
+  { id: "shop_dddddddddd", name: "Sainsburys" },
+  { id: "shop_eeeeeeeeee", name: "Savers" },
+].sort(sortShopsAlphabetically);
 
-export function shopExists(id: ShopId): boolean {
-  return SHOPS.has(id);
-}
-
-export const ALL_SHOPS = (function (): Shop[] {
-  const result: Shop[] = [];
-  for (const [id, name] of SHOPS.entries()) {
-    result.push({ id, name });
-  }
-
-  return result.sort(sortShopsAlphabetically);
+export const INDEXED_SHOPS: Map<ShopId, Shop> = (function () {
+  const index = new Map<ShopId, Shop>();
+  ALL_SHOPS.forEach((shop) => {
+    index.set(shop.id, shop);
+  });
+  return index;
 })();
 
 function sortShopsAlphabetically(a: Shop, b: Shop): SortAction {

@@ -1,74 +1,91 @@
-// import { Item, ItemId, ShopName } from "../domain/model";
+import { Item, ItemId, Shop, ShopId } from "../domain/model";
+import { INDEXED_SHOPS } from "../domain/shops";
+import styled from "styled-components";
 
-// interface ItemsByShop {
-//   [x: ShopName]: Item[];
-// }
+type ItemsByShop = Map<ShopId, Set<ItemId>>;
 
-// function byShop(items: Item[]): ItemsByShop {
-//   const kk: ItemsByShop = {};
+function byShop(items: Item[]): ItemsByShop {
+  const index: ItemsByShop = new Map<ShopId, Set<ItemId>>();
 
-//   items.forEach((item) => {
-//     if (!kk.hasOwnProperty(item.shop)) {
-//       kk[item.shop] = [item];
-//     } else {
-//       kk[item.shop].push(item);
-//     }
-//   });
+  for (const item of items) {
+    for (const shop of item.shops) {
+      const { shopId } = shop;
+      const { id: itemId } = item;
 
-//   return kk;
-// }
+      // Leverage the fact that you can mutate the set
+      if (index.has(shopId)) {
+        (index.get(shopId) as Set<ItemId>).add(itemId);
+      } else {
+        index.set(shopId, new Set<ItemId>([itemId]));
+      }
+    }
+  }
 
-// interface ShopItemProps {
-//   item: Item;
-//   tickOff: (id: ItemId) => void;
-// }
-// function ShopItem({ item, tickOff }: ShopItemProps) {
-//   return (
-//     <li onClick={() => tickOff(item.id)}>
-//       {item.id} {item.name}
-//     </li>
-//   );
-// }
-// interface ShopItemsProps {
-//   shop: ShopName;
-//   items: Item[];
-//   tickOff: (id: ItemId) => void;
-// }
-// function ShopItems({ shop, items, tickOff }: ShopItemsProps) {
-//   return (
-//     <div>
-//       <p>
-//         <b>{shop}</b>
-//       </p>
-//       <ol>
-//         {items.map((item) => (
-//           <ShopItem key={item.id} item={item} tickOff={tickOff} />
-//         ))}
-//       </ol>
-//     </div>
-//   );
-// }
+  return index;
+}
 
-// interface BuyViewProps {
-//   items: Item[];
-//   tickOff: (id: ItemId) => void;
-// }
-// function BuyView({ items, tickOff }: BuyViewProps) {
-//   const itemByShop = byShop(items);
+const ListItem = styled.li`
+  margin: 1rem 0;
+`;
 
-//   return (
-//     <div>
-//       <h1>Buy view</h1>
-//       <p>Use this view to purchase items in each store</p>
-//       {Object.entries(itemByShop).map(([shop, items]) => (
-//         <ShopItems key={shop} shop={shop} items={items} tickOff={tickOff} />
-//       ))}
-//     </div>
-//   );
-// }
+interface ShopItemProps {
+  item: Item;
+  tickOff: (id: ItemId) => void;
+}
+function ShopItem({ item, tickOff }: ShopItemProps) {
+  return <ListItem onClick={() => tickOff(item.id)}>{item.name}</ListItem>;
+}
 
-function BuyView() {
-  return <div>uncomment code above</div>;
+interface ShopItemsProps {
+  shop: Shop;
+  items: Item[];
+  tickOff: (id: ItemId) => void;
+}
+function ShopItems({ shop, items, tickOff }: ShopItemsProps) {
+  return (
+    <div>
+      <p>
+        <b>{shop.name}</b>
+      </p>
+      <ol>
+        {items.map((item) => (
+          <ShopItem key={item.id} item={item} tickOff={tickOff} />
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+interface BuyViewProps {
+  items: Item[];
+  tickOff: (id: ItemId) => void;
+}
+function BuyView({ items, tickOff }: BuyViewProps) {
+  const itemByShop = byShop(items);
+
+  return (
+    <div>
+      <h1>Buy view</h1>
+      <p>Use this view to purchase items in each store</p>
+      {[...itemByShop].map(([shopId, itemIds]) => {
+        const shop = INDEXED_SHOPS.get(shopId);
+        if (shop === undefined) {
+          return <pre key={shopId}>No Shop found for {shopId} ID</pre>;
+        }
+
+        const itemsInThisShop = items.filter((item) => itemIds.has(item.id));
+
+        return (
+          <ShopItems
+            key={shopId}
+            shop={shop}
+            items={itemsInThisShop}
+            tickOff={tickOff}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
 export default BuyView;

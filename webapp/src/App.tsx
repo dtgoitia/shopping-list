@@ -1,6 +1,7 @@
 import AddItem from "./AddItem";
 import "./App.css";
 import SearchBox from "./SearchBox";
+import BuyView from "./Views/Buy";
 import InventoryView from "./Views/Inventory";
 import Centered from "./components/Centered";
 import NavBar from "./components/NavBar";
@@ -24,6 +25,7 @@ function OldPage({ itemManager }: Props) {
   const [filterQuery, setFilterQuery] = useState<FilterQuery>("");
 
   const itemsInInventory = items;
+  const itemsToBuy = items.filter((item) => item.toBuy === true);
 
   useEffect(() => {
     const subscription = itemManager.changes$.subscribe((_) => {
@@ -85,7 +87,8 @@ function OldPage({ itemManager }: Props) {
           removeItem={handleRemoveItem}
         />
         <AddItem add={handleAddNewItem} />
-        {/* <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} /> */}
+
+        <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
       </Centered>
     </BlueprintThemeProvider>
   );
