@@ -1,7 +1,7 @@
 import "./App.css";
 import { ItemManager } from "./domain/ItemManager";
 import ItemEditor from "./pages/ItemEditor/ItemEditor";
-import ItemsPage from "./pages/Items";
+import ItemsPage from "./pages/ItemExplorer";
 import PageNotFound from "./pages/PageNotFound";
 import ShoppingListPage from "./pages/ShoppingList";
 import Paths from "./routes";

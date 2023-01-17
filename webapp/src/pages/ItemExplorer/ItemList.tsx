@@ -1,6 +1,6 @@
-import { Item, ItemId } from "../domain/model";
-import Paths from "../routes";
-import { Mode } from "./Items";
+import { Mode } from ".";
+import { Item, ItemId } from "../../domain/model";
+import Paths from "../../routes";
 import { Button } from "@blueprintjs/core";
 import { useState } from "react";
 import { Link } from "react-router-dom";
