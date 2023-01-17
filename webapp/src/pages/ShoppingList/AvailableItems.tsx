@@ -1,4 +1,4 @@
-import { Item, ItemId } from "../domain/model";
+import { Item, ItemId } from "../../domain/model";
 import { Button } from "@blueprintjs/core";
 import styled from "styled-components";
 
@@ -36,7 +36,7 @@ interface InventoryViewProps {
   addItemToBuy: (id: ItemId) => void;
   removeItemToBuy: (id: ItemId) => void;
 }
-function InventoryView({
+function AvailableItems({
   items,
   addItemToBuy,
   removeItemToBuy,
@@ -61,4 +61,4 @@ function InventoryView({
   );
 }
 
-export default InventoryView;
+export default AvailableItems;

@@ -1,5 +1,5 @@
-import { Item, ItemId, ItemShop, Shop, ShopId } from "../domain/model";
-import { INDEXED_SHOPS } from "../domain/shops";
+import { Item, ItemId, ItemShop, Shop, ShopId } from "../../domain/model";
+import { INDEXED_SHOPS } from "../../domain/shops";
 import styled from "styled-components";
 
 const NO_SHOP: Shop = { id: "shop_nooooshop", name: "No shop" };
@@ -73,7 +73,7 @@ interface BuyViewProps {
   items: Item[];
   tickOff: (id: ItemId) => void;
 }
-function BuyView({ items, tickOff }: BuyViewProps) {
+function ItemsToBuy({ items, tickOff }: BuyViewProps) {
   const itemByShop = byShop(items);
 
   return (
@@ -101,4 +101,4 @@ function BuyView({ items, tickOff }: BuyViewProps) {
   );
 }
 
-export default BuyView;
+export default ItemsToBuy;

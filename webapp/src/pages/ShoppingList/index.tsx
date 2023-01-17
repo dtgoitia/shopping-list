@@ -1,14 +1,14 @@
-import AddItem from "../AddItem";
-import SearchBox from "../SearchBox";
-import BuyView from "../Views/Buy";
-import InventoryView from "../Views/Inventory";
-import Centered from "../components/Centered";
-import NavBar from "../components/NavBar";
-import { filterInventory, FilterQuery } from "../domain";
-import { ItemManager } from "../domain/ItemManager";
-import { Item, ItemId, ItemName } from "../domain/model";
-import { notify } from "../notify";
-import BlueprintThemeProvider from "../style/theme";
+import AddItem from "../../AddItem";
+import SearchBox from "../../SearchBox";
+import Centered from "../../components/Centered";
+import NavBar from "../../components/NavBar";
+import { filterInventory, FilterQuery } from "../../domain";
+import { ItemManager } from "../../domain/ItemManager";
+import { Item, ItemId, ItemName } from "../../domain/model";
+import { notify } from "../../notify";
+import BlueprintThemeProvider from "../../style/theme";
+import AvailableItems from "./AvailableItems";
+import ItemsToBuy from "./ItemsToBuy";
 import { Alignment, Button, Collapse, Switch } from "@blueprintjs/core";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -17,7 +17,7 @@ interface Props {
   itemManager: ItemManager;
 }
 
-function ShoppingList({ itemManager }: Props) {
+function ShoppingListPage({ itemManager }: Props) {
   const [items, setItems] = useState<Item[]>([]);
   const [filterQuery, setFilterQuery] = useState<FilterQuery>("");
   const [showInventory, setShowInventory] = useState<boolean>(false);
@@ -128,7 +128,7 @@ function ShoppingList({ itemManager }: Props) {
             onChange={setFilterQuery}
             placeholder={"Filter inventory..."}
           />
-          <InventoryView
+          <AvailableItems
             items={filterInventory(itemsInInventory, filterQuery)}
             addItemToBuy={handleAddItemToBuy}
             removeItemToBuy={handleRemoveItemToBuy}
@@ -144,13 +144,13 @@ function ShoppingList({ itemManager }: Props) {
           onClick={handleUndo}
         />
 
-        <BuyView items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
+        <ItemsToBuy items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
       </Centered>
     </BlueprintThemeProvider>
   );
 }
 
-export default ShoppingList;
+export default ShoppingListPage;
 
 const SwitchContainer = styled.div`
   margin: 0 0 0 1rem;
