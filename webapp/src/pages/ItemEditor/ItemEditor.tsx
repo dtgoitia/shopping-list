@@ -9,11 +9,11 @@ import {
 } from "../../domain/ItemManager";
 import { Item, ItemName, Price, ShopId } from "../../domain/model";
 import { ALL_SHOPS } from "../../domain/shops";
+import { notify } from "../../notify";
 import Paths from "../../routes";
 import BlueprintThemeProvider from "../../style/theme";
 import ItemShops from "./ItemShops";
 import ShopsToAdd from "./ShopsToAdd";
-import { Position, Toaster } from "@blueprintjs/core";
 import { Button, Card, Label } from "@blueprintjs/core";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -82,10 +82,7 @@ function ItemEditor({ itemManager }: Props) {
     itemManager.update({ item }).match({
       ok: () => {
         // Show pop up
-        Toaster.create({
-          className: "recipe-toaster",
-          position: Position.BOTTOM,
-        }).show({
+        notify({
           message: `Item "${item.name}" successfully saved`,
           intent: "success",
         });
