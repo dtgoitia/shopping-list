@@ -1,6 +1,9 @@
-import { Item, ItemId, Shop, ShopId } from "../domain/model";
+import { Item, ItemId, ItemShop, Shop, ShopId } from "../domain/model";
 import { INDEXED_SHOPS } from "../domain/shops";
 import styled from "styled-components";
+
+const NO_SHOP: Shop = { id: "shop_nooooshop", name: "No shop" };
+const NO_ITEMP_SHOP: ItemShop = { shopId: NO_SHOP.id, priceHistory: [] };
 
 type ItemsByShop = Map<ShopId, Set<ItemId>>;
 
@@ -8,7 +11,9 @@ function byShop(items: Item[]): ItemsByShop {
   const index: ItemsByShop = new Map<ShopId, Set<ItemId>>();
 
   for (const item of items) {
-    for (const shop of item.shops) {
+    const itemShops = item.shops.length > 0 ? item.shops : [NO_ITEMP_SHOP];
+
+    for (const shop of itemShops) {
       const { shopId } = shop;
       const { id: itemId } = item;
 
@@ -56,6 +61,14 @@ function ShopItems({ shop, items, tickOff }: ShopItemsProps) {
   );
 }
 
+function getShopById(id: ShopId): Shop | undefined {
+  if (id === NO_SHOP.id) {
+    return NO_SHOP;
+  }
+
+  return INDEXED_SHOPS.get(id);
+}
+
 interface BuyViewProps {
   items: Item[];
   tickOff: (id: ItemId) => void;
@@ -68,7 +81,7 @@ function BuyView({ items, tickOff }: BuyViewProps) {
       <h1>Buy view</h1>
       <p>Use this view to purchase items in each store</p>
       {[...itemByShop].map(([shopId, itemIds]) => {
-        const shop = INDEXED_SHOPS.get(shopId);
+        const shop = getShopById(shopId);
         if (shop === undefined) {
           return <pre key={shopId}>No Shop found for {shopId} ID</pre>;
         }
