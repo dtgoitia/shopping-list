@@ -76,15 +76,19 @@ interface BuyViewProps {
 function ItemsToBuy({ items, tickOff }: BuyViewProps) {
   const itemByShop = byShop(items);
 
+  const sortedShopIds = [...itemByShop].map(([shopId, _]) => shopId).sort();
+
   return (
     <div>
       <h1>Buy view</h1>
       <p>Use this view to purchase items in each store</p>
-      {[...itemByShop].map(([shopId, itemIds]) => {
+      {sortedShopIds.map((shopId) => {
         const shop = getShopById(shopId);
         if (shop === undefined) {
           return <pre key={shopId}>No Shop found for {shopId} ID</pre>;
         }
+
+        const itemIds = itemByShop.get(shopId) as Set<ItemId>;
 
         const itemsInThisShop = items.filter((item) => itemIds.has(item.id));
 
