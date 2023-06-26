@@ -1,6 +1,7 @@
 import AddItem from "../../AddItem";
 import SearchBox, { NO_FILTER_QUERY } from "../../SearchBox";
 import Centered from "../../components/Centered";
+import { DownloadJson } from "../../components/DownloadJson";
 import NavBar from "../../components/NavBar";
 import { filterInventory, FilterQuery } from "../../domain";
 import { ItemManager } from "../../domain/ItemManager";
@@ -106,6 +107,8 @@ function ItemsPage({ itemManager }: Props) {
         </SwitchContainer>
 
         <AddItem add={handleAddNewItem} />
+
+        <DownloadJson itemManager={itemManager} />
       </Centered>
     </BlueprintThemeProvider>
   );
