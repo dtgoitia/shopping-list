@@ -1,14 +1,18 @@
 import { FilterQuery } from "./domain";
 
+export const NO_FILTER_QUERY = "";
+
 interface Props {
   query: FilterQuery;
   placeholder: string;
   onChange: (query: FilterQuery) => void;
+  clearSearch: () => void;
 }
 
 function SearchBox({
   query,
   onChange: onFilterQueryChange,
+  clearSearch,
   placeholder,
 }: Props) {
   return (
@@ -22,6 +26,12 @@ function SearchBox({
         placeholder={placeholder}
         // placeholder="Filter inventory..."
       />
+      {query !== NO_FILTER_QUERY && (
+        <button
+          className="bp4-button bp4-minimal bp4-intent-warning bp4-icon-cross"
+          onClick={() => clearSearch()}
+        />
+      )}
     </div>
   );
 }

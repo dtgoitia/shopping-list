@@ -1,5 +1,5 @@
 import AddItem from "../../AddItem";
-import SearchBox from "../../SearchBox";
+import SearchBox, { NO_FILTER_QUERY } from "../../SearchBox";
 import Centered from "../../components/Centered";
 import NavBar from "../../components/NavBar";
 import { filterInventory, FilterQuery } from "../../domain";
@@ -74,6 +74,10 @@ function ItemsPage({ itemManager }: Props) {
     }
   }
 
+  function handleClearSearch(): void {
+    setFilterQuery(NO_FILTER_QUERY);
+  }
+
   const filteredItems = filterInventory(items, filterQuery);
 
   return (
@@ -84,6 +88,7 @@ function ItemsPage({ itemManager }: Props) {
           query={filterQuery}
           onChange={setFilterQuery}
           placeholder={"Filter inventory items..."}
+          clearSearch={() => handleClearSearch()}
         />
         <ItemList
           items={filteredItems}

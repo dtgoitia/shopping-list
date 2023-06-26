@@ -1,5 +1,5 @@
 import AddItem from "../../AddItem";
-import SearchBox from "../../SearchBox";
+import SearchBox, { NO_FILTER_QUERY } from "../../SearchBox";
 import Centered from "../../components/Centered";
 import NavBar from "../../components/NavBar";
 import { filterInventory, FilterQuery } from "../../domain";
@@ -109,6 +109,10 @@ function ShoppingListPage({ itemManager }: Props) {
     });
   }
 
+  function handleClearSearch(): void {
+    setFilterQuery(NO_FILTER_QUERY);
+  }
+
   return (
     <BlueprintThemeProvider>
       <Centered>
@@ -127,6 +131,7 @@ function ShoppingListPage({ itemManager }: Props) {
             query={filterQuery}
             onChange={setFilterQuery}
             placeholder={"Filter inventory..."}
+            clearSearch={() => handleClearSearch()}
           />
           <AvailableItems
             items={filterInventory(itemsInInventory, filterQuery)}
