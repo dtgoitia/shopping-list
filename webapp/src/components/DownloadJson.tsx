@@ -87,7 +87,7 @@ function generateFilename({ date }: { date: Date }): string {
     .replaceAll(":", "")
     .replace("T", "-")
     .slice(0, 15);
-  return `fitness-tracker__backup_${formattedDate}.txt`;
+  return `shopping-list__backup_${formattedDate}.txt`;
 }
 
 function isShareApiAvailable(): boolean {
@@ -143,7 +143,7 @@ function generateFile({ itemManager, date, fileName }: GenerateFileArgs): File {
 }
 function shareFile(file: File): void {
   const dataToShare: ShareData = {
-    title: "fitness-tracker JSON",
+    title: "shopping-list JSON",
     files: [file],
   };
 
