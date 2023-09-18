@@ -9,7 +9,7 @@ import { notify } from "../../notify";
 import BlueprintThemeProvider from "../../style/theme";
 import AvailableItems from "./AvailableItems";
 import ItemsToBuy from "./ItemsToBuy";
-import { Alignment, Button, Collapse, Switch } from "@blueprintjs/core";
+import { Alignment, Button, Card, Collapse, Switch } from "@blueprintjs/core";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -21,6 +21,7 @@ function ShoppingListPage({ itemManager }: Props) {
   const [items, setItems] = useState<Item[]>([]);
   const [filterQuery, setFilterQuery] = useState<FilterQuery>("");
   const [showInventory, setShowInventory] = useState<boolean>(false);
+  const [showUndoList, setShowUndoList] = useState<boolean>(true);
 
   // This "change" refers to toggling the `item.toBuy` property
   const [changedItems, setChangeItems] = useState<ItemId[]>([]);
@@ -70,6 +71,10 @@ function ShoppingListPage({ itemManager }: Props) {
 
   function toggleShowInventory(): void {
     setShowInventory(!showInventory);
+  }
+
+  function toggleShowUndoList(): void {
+    setShowUndoList(!showUndoList);
   }
 
   function handleUndo(): void {
@@ -141,15 +146,38 @@ function ShoppingListPage({ itemManager }: Props) {
           <AddItem add={handleAddNewItem} />
         </Collapse>
 
-        <pre>{JSON.stringify(changedItems)}</pre>
-        <Button
-          disabled={changedItems.length === 0}
-          text={
-            changedItems.length === 0 ? `undo` : `undo ${changedItems.length}`
-          }
-          icon="undo"
-          onClick={handleUndo}
-        />
+        <Card>
+          <Button
+            disabled={changedItems.length === 0}
+            text={
+              changedItems.length === 0
+                ? `undo`
+                : `undo last (${changedItems.length})`
+            }
+            icon="undo"
+            onClick={handleUndo}
+          />
+          <Button
+            text={showUndoList ? `close` : `open`}
+            icon={showUndoList ? `cross` : null}
+            onClick={() => toggleShowUndoList()}
+          />
+          <Collapse isOpen={showUndoList}>
+            <ol>
+              {changedItems.map((itemId, i) => {
+                const name: string = itemManager.get(itemId).match({
+                  Some: (item) => (item as Item).name,
+                  None: () => itemId,
+                });
+                return (
+                  <li key={itemId}>
+                    {i + 1}. {name}
+                  </li>
+                );
+              })}
+            </ol>
+          </Collapse>
+        </Card>
 
         <ItemsToBuy items={itemsToBuy} tickOff={handleRemoveItemToBuy} />
       </Centered>
