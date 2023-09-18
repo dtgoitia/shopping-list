@@ -144,7 +144,9 @@ function ShoppingListPage({ itemManager }: Props) {
         <pre>{JSON.stringify(changedItems)}</pre>
         <Button
           disabled={changedItems.length === 0}
-          text="undo"
+          text={
+            changedItems.length === 0 ? `undo` : `undo ${changedItems.length}`
+          }
           icon="undo"
           onClick={handleUndo}
         />
