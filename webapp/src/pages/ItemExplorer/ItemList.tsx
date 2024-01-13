@@ -89,7 +89,15 @@ function EditableItem({ item }: { item: Item }) {
   const path = `${Paths.items}/${item.id}`;
   return (
     <LinkContainer>
-      <Link to={path}>{item.name}</Link>
+      <Link to={path}>
+        {item.name}
+        {item.quantity && (
+          <span>
+            {" - "}
+            <i>{item.quantity}</i>
+          </span>
+        )}
+      </Link>
     </LinkContainer>
   );
 }

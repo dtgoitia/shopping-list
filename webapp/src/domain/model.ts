@@ -1,6 +1,7 @@
 export type Hash = string;
 export type ItemId = string;
 export type ItemName = string;
+export type Quantity = string;
 export type ShopId = string;
 export type ShopName = string;
 export type MoneyInCents = number;
@@ -36,4 +37,5 @@ export interface Item {
   otherNames: ItemName[];
   shops: ItemShop[];
   toBuy: boolean;
+  quantity?: Quantity;
 }

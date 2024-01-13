@@ -38,7 +38,17 @@ interface ShopItemProps {
   tickOff: (id: ItemId) => void;
 }
 function ShopItem({ item, tickOff }: ShopItemProps) {
-  return <ListItem onClick={() => tickOff(item.id)}>{item.name}</ListItem>;
+  return (
+    <ListItem onClick={() => tickOff(item.id)}>
+      {item.name}
+      {item.quantity && (
+        <span>
+          {" - "}
+          <i>{item.quantity}</i>
+        </span>
+      )}
+    </ListItem>
+  );
 }
 
 interface ShopItemsProps {

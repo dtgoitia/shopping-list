@@ -6,8 +6,9 @@ import {
   ItemManager,
   setItemName,
   setItemOtherNames,
+  setQuantity,
 } from "../../domain/ItemManager";
-import { Item, ItemName, Price, ShopId } from "../../domain/model";
+import { Item, ItemName, Price, Quantity, ShopId } from "../../domain/model";
 import { ALL_SHOPS } from "../../domain/shops";
 import { notify } from "../../notify";
 import Paths from "../../routes";
@@ -49,6 +50,11 @@ function ItemEditor({ itemManager }: Props) {
   function handleOtherNamesChange(event: any): void {
     const otherNames: ItemName[] = event.target.value.split(",");
     setItem(setItemOtherNames(item, otherNames));
+  }
+
+  function handleQuantityChange(event: any): void {
+    const quantity: Quantity = event.target.value;
+    setItem(setQuantity(item, quantity));
   }
 
   function handleAddShop(shopId: ShopId): void {
@@ -138,6 +144,17 @@ function ItemEditor({ itemManager }: Props) {
             value={item.otherNames.join(",")}
             placeholder="Other names"
             onChange={handleOtherNamesChange}
+          />
+        </Label>
+
+        <Label>
+          quantity:
+          <input
+            type="text"
+            className={"bp4-input"}
+            value={item.quantity}
+            placeholder="3 uds, 1 g, ..."
+            onChange={handleQuantityChange}
           />
         </Label>
 

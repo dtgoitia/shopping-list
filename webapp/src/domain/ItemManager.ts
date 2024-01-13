@@ -1,10 +1,10 @@
 import { todo, unreachable } from "./devex";
 import { generateId } from "./hash";
-import { Hash, Item, ItemId, ItemName, Price, ShopId } from "./model";
+import { Hash, Item, ItemId, ItemName, Price, Quantity, ShopId } from "./model";
 import { SortAction } from "./sort";
 import { Err, ErrorReason, Maybe, MaybeType, Ok, Result } from "./success";
 import { Observable, Subject } from "rxjs";
-import { makeTaggedUnion, MemberType } from "safety-match";
+import { MemberType, makeTaggedUnion } from "safety-match";
 
 export const ITEM_PREFIX = "item";
 
@@ -186,6 +186,10 @@ export function setItemName(item: Item, name: ItemName): Item {
 
 export function setItemOtherNames(item: Item, otherNames: ItemName[]): Item {
   return { ...item, otherNames };
+}
+
+export function setQuantity(item: Item, quantity: Quantity): Item {
+  return { ...item, quantity };
 }
 
 export function addItemToShop(item: Item, shopId: ShopId): ItemResultType {
