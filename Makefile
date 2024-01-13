@@ -1,5 +1,27 @@
 WEBAPP_NAME:=shopping-list-webapp
 
+set-up-development-environment:
+	@echo ""
+	@echo Installing git hooks...
+	make install-dev-tools
+
+	@echo ""
+	@echo ""
+	@echo Installing NPM dependencies outside of the container, to support pre-push builds...
+	@# this step is necessary because otherwise docker compose creates a node_modules
+	@# folder with root permissions and outside-container build fails
+	sudo rm -rf webapp/node_modules
+	cd webapp; npm ci
+
+	@echo ""
+	@echo Building webapp container image...
+	make rebuild-webapp
+
+	@echo ""
+	@echo ""
+	@echo To start webapp:  make run_webapp
+	@echo To start api:     make run_api
+
 install-dev-tools:
 	pre-commit install  # pre-commit is (default)
 	pre-commit install --hook-type pre-push
@@ -7,6 +29,13 @@ install-dev-tools:
 uninstall-dev-tools:
 	pre-commit uninstall  # pre-commit is (default)
 	pre-commit uninstall --hook-type pre-push
+
+
+#===============================================================================
+#
+#   webapp
+#
+#===============================================================================
 
 run-webapp:
 	scripts/print_local_ip_via_qr.sh
@@ -31,6 +60,3 @@ deploy-webapp-from-local:
 
 build-webapp:
 	scripts/build_webapp.sh
-
-set-up-development-environment: install-dev-tools rebuild-webapp
-	cd webapp; npm ci
