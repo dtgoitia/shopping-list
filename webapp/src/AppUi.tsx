@@ -1,4 +1,3 @@
-import "./App.css";
 import { ItemManager } from "./domain/ItemManager";
 import ItemEditor from "./pages/ItemEditor/ItemEditor";
 import ItemsPage from "./pages/ItemExplorer";
@@ -11,7 +10,7 @@ interface Props {
   itemManager: ItemManager;
 }
 
-function App({ itemManager }: Props) {
+export function AppUi({ itemManager }: Props) {
   return (
     <Routes>
       <Route
@@ -30,5 +29,3 @@ function App({ itemManager }: Props) {
     </Routes>
   );
 }
-
-export default App;

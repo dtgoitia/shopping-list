@@ -1,4 +1,4 @@
-import App from "./App";
+import { AppUi } from "./AppUi";
 import "./blueprint.css";
 import { BASE_URL } from "./constants";
 import "./index.css";
@@ -16,7 +16,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter basename={BASE_URL}>
       <GlobalStyle theme={activeTheme} />
-      <App itemManager={itemManager} />
+      <AppUi itemManager={itemManager} />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
