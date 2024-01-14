@@ -10,7 +10,7 @@ set-up-development-environment:
 	@echo Installing NPM dependencies outside of the container, to support pre-push builds...
 	@# this step is necessary because otherwise docker compose creates a node_modules
 	@# folder with root permissions and outside-container build fails
-	sudo rm -rf webapp/node_modules
+	rm -rf webapp/node_modules
 	cd webapp; npm ci
 
 	@echo ""
@@ -30,6 +30,20 @@ uninstall-dev-tools:
 	pre-commit uninstall  # pre-commit is (default)
 	pre-commit uninstall --hook-type pre-push
 
+remove-development-environment:
+	@echo ""
+	@echo Uninstalling git hooks...
+	make uninstall-dev-tools
+
+	@echo ""
+	@echo Uninstalling NPM dependencies outside of the container
+	rm -rf webapp/node_modules
+
+	@echo ""
+	@echo Removing docker containers and images
+	docker compose down
+	docker image rm $(WEBAPP_NAME) || (echo "No $(WEBAPP_NAME) found, all good."; exit 0)
+	docker image rm qr || (echo "No qr found, all good."; exit 0)
 
 #===============================================================================
 #

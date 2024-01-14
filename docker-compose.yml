@@ -5,7 +5,7 @@ services:
     build:
       context: ./webapp
       dockerfile: Dockerfile
-    image: shoppint-list-webapp
+    image: shopping-list-webapp
     container_name: shopping-list-webapp
     command: "npm start"
     ports:
