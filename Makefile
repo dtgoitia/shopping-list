@@ -43,7 +43,6 @@ remove-development-environment:
 	@echo Removing docker containers and images
 	docker compose down
 	docker image rm $(WEBAPP_NAME) || (echo "No $(WEBAPP_NAME) found, all good."; exit 0)
-	docker image rm qr || (echo "No qr found, all good."; exit 0)
 
 #===============================================================================
 #
